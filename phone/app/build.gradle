@@ -5,10 +5,11 @@
  */
 
 plugins {
-    id('org.jetbrains.kotlin.android')
-    id("com.android.application")
+    alias(libs.plugins.android.gradle.plugin)
+    alias(libs.plugins.kotlin.gradle.plugin)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.compose.compiler.plugin)
     id("dagger.hilt.android.plugin")
-    id("com.google.devtools.ksp")
 }
 
 kotlin {
@@ -31,6 +32,7 @@ android {
         }
 
         release {
+            applicationIdSuffix = ".release"
             minifyEnabled = true
         }
     }
@@ -42,12 +44,24 @@ android {
 
     buildFeatures {
         buildConfig = true
+        compose = true
     }
 }
 
 dependencies {
-    ksp libs.dagger.hilt.android.compiler
-    implementation libs.dagger.hilt.android
-    ksp libs.kotlin.gradle.plugin
-    implementation project(':utilities')
+    ksp(libs.dagger.hilt.android.compiler)
+    ksp(libs.kotlin.gradle.plugin)
+
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.media3.common)
+    implementation(libs.androidx.media3.player)
+    implementation(libs.androidx.media3.session)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.foundation.layout)
+    implementation(libs.compose.foundation)
+    implementation(libs.compose.material3)
+    implementation(libs.dagger.hilt.android)
+    implementation(project(':utilities'))
 }
